@@ -35,6 +35,7 @@ const server = app.listen(port, "0.0.0.0", () => {
     console.log("server started on port 3000");
 })
 const io = new Server(server, {
+    pingTimeout: 60000,
     cors: {
         origin: "https://archats-arm.netlify.app",
     }
