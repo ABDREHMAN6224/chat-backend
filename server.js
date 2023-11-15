@@ -29,7 +29,9 @@ app.use("/chat", chatRoutes);
 app.use("/chat", messageRoutes);
 
 connection();
-const server = app.listen(3000, () => {
+const port = process.env.PORT || 3000;
+
+const server = app.listen(port, "0.0.0.0", () => {
     console.log("server started on port 3000");
 })
 const io = new Server(server, {
