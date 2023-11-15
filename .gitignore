@@ -8,11 +8,9 @@ node_modules/
 .npm
 
 # Optional eslint cache
-.eslintcache
 
 
 # Yarn Integrity file
-.yarn-integrity
 
 # dotenv environment variable files
 .env
