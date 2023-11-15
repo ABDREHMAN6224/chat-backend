@@ -36,7 +36,7 @@ const server = app.listen(port, "0.0.0.0", () => {
 })
 const io = new Server(server, {
     cors: {
-        origin: "https://archats-arm.netlify.app/login",
+        origin: "https://archats-arm.netlify.app",
     }
 });
 let users = [];
