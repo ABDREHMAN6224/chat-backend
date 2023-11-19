@@ -42,7 +42,7 @@ const io = new Server(server, {
         origin: "https://archats-arm.netlify.app"
     }
 });
-let users = [];
+var users = [];
 io.on("connection", (socket) => {
     socket.on('setup', (user) => {
         console.log(user);
@@ -50,7 +50,6 @@ io.on("connection", (socket) => {
         console.log("users start are ", users);
         users.push[user._id];
         console.log("users  start are ", users);
-        users = [...new Set(users)]
         socket.id = user._id;
         socket.emit("online", users)
     })
