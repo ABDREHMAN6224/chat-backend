@@ -46,7 +46,7 @@ let users = {};
 io.on("connection", (socket) => {
     socket.on('setup', (user) => {
         socket.join(user._id);
-        if (users[socket.id]) {
+        if (Object.values(users).includes(user._id)) {
         } else {
             users[socket.id] = user._id;
         }
@@ -87,7 +87,6 @@ io.on("connection", (socket) => {
         }
     })
     socket.on("disconnect", () => {
-
         delete users[socket.id];
         socket.broadcast.emit("online", Object.values(users))
     })
