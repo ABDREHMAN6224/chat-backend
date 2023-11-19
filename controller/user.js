@@ -22,7 +22,7 @@ export const RegisterUser = expressAsyncHandler(async (req, res) => {
             user.generateToken()
             res.status(200).json(user)
         } catch (error) {
-            throw new Error("Failed to create new User")
+            throw new Error("Failed to create User")
         }
 
     } catch (error) {
