@@ -1,5 +1,4 @@
 export const uploadFile = async (req, res) => {
-    // const urlServer = "http://localhost:3000"
     const urlServer = "https://ar-chat-arm.up.railway.app"
     if (!req.file) {
         return res.status(404).json({ err: "no file found" })

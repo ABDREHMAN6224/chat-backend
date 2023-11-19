@@ -33,14 +33,12 @@ app.use("/notification", notificationRouter)
 connection();
 const port = process.env.PORT || 3000;
 
-// const server = app.listen(3000, () => {
 const server = app.listen(port, "0.0.0.0", () => {
     console.log("server started on port 3000");
 })
 const io = new Server(server, {
     cors: {
         origin: "https://archats-arm.netlify.app",
-        // origin: "http://localhost:5173",
     }
 });
 let users = {};
