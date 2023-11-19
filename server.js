@@ -45,6 +45,7 @@ const io = new Server(server, {
 let users = [];
 io.on("connection", (socket) => {
     socket.on('setup', (user) => {
+        console.log(user);
         socket.join(user._id);
         console.log("users start are ", users);
         users.push[user._id];
