@@ -47,7 +47,7 @@ io.on("connection", (socket) => {
     socket.on('setup', (user) => {
         socket.join(user._id);
         socket.id = user._id
-        users.push[socket.id];
+        users.push[user._id];
         users = [...new Set(users)]
         socket.broadcast.emit("online", users)
     })
@@ -85,7 +85,9 @@ io.on("connection", (socket) => {
         }
     })
     socket.on("disconnect", () => {
+        console.log("users are ", users);
         users = users.filter(u => u !== socket.id)
+        console.log("after users are ", users);
         socket.broadcast.emit("online", users)
     })
 })
