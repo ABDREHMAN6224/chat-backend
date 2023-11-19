@@ -37,22 +37,19 @@ const port = process.env.PORT || 3000;
 const server = app.listen(port, "0.0.0.0", () => {
     console.log("server started on port 3000");
 })
+let users = [];
 const io = new Server(server, {
     cors: {
         origin: "https://archats-arm.netlify.app"
     }
 });
-let users = {};
 io.on("connection", (socket) => {
     socket.on('setup', (user) => {
         socket.join(user._id);
         socket.id = user._id
-        if (Object.values(users).includes(user._id)) {
-        } else {
-            users[socket.id] = user._id;
-        }
-
-        socket.broadcast.emit("online", Object.values(users))
+        users.push[socket.id];
+        users = [...new Set(users)]
+        socket.broadcast.emit("online", users)
     })
     socket.on('join chat', (chat) => {
         socket.join(chat.chat._id);
@@ -88,7 +85,7 @@ io.on("connection", (socket) => {
         }
     })
     socket.on("disconnect", () => {
-        delete users[socket.id];
-        socket.broadcast.emit("online", Object.values(users))
+        users = users.filter(u => u !== socket.id)
+        socket.broadcast.emit("online", users)
     })
 })
