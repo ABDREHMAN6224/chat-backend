@@ -53,7 +53,7 @@ io.on("connection", (socket) => {
         console.log("onlineUsers  start are ", onlineUsers);
         socket.id = user._id;
         console.log("socket id ", socket.id);
-        // socket.emit("online", onlineUsers)
+        socket.emit("online", onlineUsers)
     })
     socket.on('join chat', (chat) => {
         socket.join(chat.chat._id);
@@ -90,8 +90,8 @@ io.on("connection", (socket) => {
     })
     socket.on("disconnect", () => {
         console.log("onlineUsers are ", onlineUsers);
-        onlineUsers = onlineUsers.filter(u => u !== socket.id)
+        onlineUsers = onlineUsers.filter(u => u._id !== socket.id)
         console.log("after onlineUsers are ", onlineUsers);
-        // socket.emit("online", onlineUsers)
+        socket.emit("online", onlineUsers)
     })
 })
