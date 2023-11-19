@@ -10,6 +10,7 @@ import { upload } from "./upload.js";
 import authRoutes from "./router/auth.js"
 import chatRoutes from "./router/chatRoutes.js"
 import messageRoutes from "./router/messageRoutes.js"
+import notificationRouter from "./router/notificationRoutes.js"
 import { Server } from "socket.io";
 
 
@@ -25,31 +26,32 @@ app.use(express.static(path.join(__dirname, "public/")))
 app.post("/fileupload", upload.single("file"), uploadFile)
 
 app.use("/auth", authRoutes);
-app.use("/chat", chatRoutes);
+app.use("/chats", chatRoutes);
 app.use("/chat", messageRoutes);
+app.use("/notification", notificationRouter)
 
 connection();
 const port = process.env.PORT || 3000;
 
+// const server = app.listen(3000, () => {
 const server = app.listen(port, "0.0.0.0", () => {
     console.log("server started on port 3000");
 })
 const io = new Server(server, {
-    pingTimeout: 60000,
     cors: {
         origin: "https://archats-arm.netlify.app",
+        // origin: "http://localhost:5173",
     }
 });
-let users = [];
+let users = {};
 io.on("connection", (socket) => {
     socket.on('setup', (user) => {
         socket.join(user._id);
-        users.push(user._id)
-        users = [...new Set(users)];
-        socket.emit("connected", users);
+        users[socket.id] = user._id;
+        socket.broadcast.emit("online", Object.values(users))
     })
-    socket.on('join chat', (chat_id) => {
-        socket.join(chat_id);
+    socket.on('join chat', (chat) => {
+        socket.join(chat.chat._id);
     })
     socket.on('new_message', (message) => {
         let chat = message.chat;
@@ -57,9 +59,33 @@ io.on("connection", (socket) => {
             return console.log("error");
         }
         chat.members.forEach(user => {
-            console.log("id:", user._id == message.msg.author._id);
             if (user._id == message.msg.author._id) return;
-            socket.in(user._id).emit("message recieved", message.msg);
+            socket.in(user._id).emit("message recieved", { message: message.msg, author: user._id });
         })
+    })
+    socket.on('new chat', (user, author) => {
+        socket.in(user._id).emit("chat created");
+        socket.in(author._id).emit("chat created");
+    })
+    socket.on('start typing', (chat, user) => {
+        chat.members.map(m => {
+            if (m._id !== user._id) {
+                socket.in(m._id).emit("started", chat)
+            }
+        })
+    })
+    socket.on('stop typing', (chat, user) => {
+        if (chat && user) {
+            chat?.members?.map(m => {
+                if (m._id !== user._id) {
+                    socket.in(m._id).emit("stopped", chat)
+                }
+            })
+        }
+    })
+    socket.on("disconnect", () => {
+        console.log(users[socket.id]);
+        delete users[socket.id];
+        socket.broadcast.emit("online", Object.values(users))
     })
 })

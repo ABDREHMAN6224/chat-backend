@@ -51,15 +51,16 @@ export const accessChat = asyncHandler(async (req, res) => {
 
 
 export const fetchChats = asyncHandler(async (req, res) => {
+    console.log("hey");
     try {
-        const found = await Chat.find({ users: { $elemMatch: { $eq: req.user._id } } }).populate("users", "-password").populate({
-            path: "latestMessage",
+        const found = await Chat.find({ members: { $elemMatch: { $eq: req.user._id } } }).populate("members", "-password").populate({
+            path: "recentMessage",
             populate: {
-                path: "sender",
-                select: "name pic email"
+                path: "author",
+                select: "name picturePath email"
             }
         }).sort({ updatedAt: -1 })
-        res.status(200).send(found)
+        res.status(200).json(found)
     } catch (error) {
 
     }

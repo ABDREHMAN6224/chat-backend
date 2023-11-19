@@ -36,14 +36,19 @@ export const sendMessage = asyncHandler(async (req, res) => {
 
 export const allMessages = asyncHandler(async (req, res) => {
     const { chatId } = req.params
-    const foundChat = await Message.find({ chat: chatId })
-        .populate("author", "-password")
-        .populate({
-            path: "chat",
-            populate: {
-                path: "members",
-                select: "name picturePath email"
-            }
-        })
-    return res.json(foundChat)
+    if (chatId !== "undefined") {
+        const foundChat = await Message.find({ chat: chatId })
+            .populate("author", "-password")
+            .populate({
+                path: "chat",
+                populate: {
+                    path: "members",
+                    select: "name picturePath email"
+                }
+            })
+        return res.json(foundChat)
+    }
+    else {
+        return res.json([])
+    }
 })
