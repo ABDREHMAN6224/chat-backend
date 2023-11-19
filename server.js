@@ -42,16 +42,16 @@ const io = new Server(server, {
         origin: "https://archats-arm.netlify.app"
     }
 });
-var users = [""];
+const onlineUsers = []
 io.on("connection", (socket) => {
     socket.on('setup', (user) => {
         console.log(user);
         socket.join(user._id);
-        console.log("users start are ", users);
-        users = users.push[user._id];
-        console.log("users  start are ", users);
+        console.log("users start are ", onlineUsers);
+        onlineUsers.push[user._id];
+        console.log("onlineUsers  start are ", onlineUsers);
         socket.id = user._id;
-        socket.emit("online", users)
+        socket.emit("online", onlineUsers)
     })
     socket.on('join chat', (chat) => {
         socket.join(chat.chat._id);
@@ -87,9 +87,9 @@ io.on("connection", (socket) => {
         }
     })
     socket.on("disconnect", () => {
-        console.log("users are ", users);
-        users = users.filter(u => u !== socket.id)
-        console.log("after users are ", users);
-        socket.emit("online", users)
+        console.log("onlineUsers are ", onlineUsers);
+        onlineUsers = onlineUsers.filter(u => u !== socket.id)
+        console.log("after onlineUsers are ", onlineUsers);
+        socket.emit("online", onlineUsers)
     })
 })
