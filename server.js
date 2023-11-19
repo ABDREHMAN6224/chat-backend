@@ -47,7 +47,11 @@ let users = {};
 io.on("connection", (socket) => {
     socket.on('setup', (user) => {
         socket.join(user._id);
-        users[socket.id] = user._id;
+        if (users[socket.id]) {
+        } else {
+            users[socket.id] = user._id;
+        }
+
         socket.broadcast.emit("online", Object.values(users))
     })
     socket.on('join chat', (chat) => {
@@ -84,7 +88,7 @@ io.on("connection", (socket) => {
         }
     })
     socket.on("disconnect", () => {
-        console.log(users[socket.id]);
+
         delete users[socket.id];
         socket.broadcast.emit("online", Object.values(users))
     })
