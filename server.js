@@ -42,13 +42,13 @@ const io = new Server(server, {
         origin: "https://archats-arm.netlify.app"
     }
 });
-var users = [];
+var users = [""];
 io.on("connection", (socket) => {
     socket.on('setup', (user) => {
         console.log(user);
         socket.join(user._id);
         console.log("users start are ", users);
-        users.push[user._id];
+        users = users.push[user._id];
         console.log("users  start are ", users);
         socket.id = user._id;
         socket.emit("online", users)
