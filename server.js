@@ -23,6 +23,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(bodyParser.json({ extended: true }))
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, "public/")))
+
 app.post("/fileupload", upload.single("file"), uploadFile)
 
 app.use("/auth", authRoutes);
