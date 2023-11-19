@@ -46,10 +46,12 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
     socket.on('setup', (user) => {
         socket.join(user._id);
-        socket.id = user._id
+        socket.id = user._id;
+        console.log("users start are ", users);
         users.push[user._id];
+        console.log("users  start are ", users);
         users = [...new Set(users)]
-        socket.broadcast.emit("online", users)
+        socket.emit("online", users)
     })
     socket.on('join chat', (chat) => {
         socket.join(chat.chat._id);
@@ -88,6 +90,6 @@ io.on("connection", (socket) => {
         console.log("users are ", users);
         users = users.filter(u => u !== socket.id)
         console.log("after users are ", users);
-        socket.broadcast.emit("online", users)
+        socket.emit("online", users)
     })
 })
