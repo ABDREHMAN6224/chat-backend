@@ -26,7 +26,7 @@ export const RegisterUser = expressAsyncHandler(async (req, res) => {
         }
 
     } catch (error) {
-        return res.status(500).json({ err: err.message })
+        return res.status(500).json({ err: error.message })
     }
 })
 
