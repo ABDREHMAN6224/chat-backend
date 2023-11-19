@@ -37,20 +37,20 @@ const port = process.env.PORT || 3000;
 const server = app.listen(port, "0.0.0.0", () => {
     console.log("server started on port 3000");
 })
-let users = [];
 const io = new Server(server, {
     cors: {
         origin: "https://archats-arm.netlify.app"
     }
 });
+let users = [];
 io.on("connection", (socket) => {
     socket.on('setup', (user) => {
         socket.join(user._id);
-        socket.id = user._id;
         console.log("users start are ", users);
         users.push[user._id];
         console.log("users  start are ", users);
         users = [...new Set(users)]
+        socket.id = user._id;
         socket.emit("online", users)
     })
     socket.on('join chat', (chat) => {
